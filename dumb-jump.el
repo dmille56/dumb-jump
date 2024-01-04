@@ -1524,7 +1524,22 @@ or most optimal searcher."
     (:type "type" :supports ("ag" "grep" "rg" "git-grep") :language "apex"
            :regex "(class|interface)\\s*JJJ\\b"
            :tests ("class test:" "public class test implements Something")
-           :not ("class testnot:" "public class testnot implements Something")))
+           :not ("class testnot:" "public class testnot implements Something"))
+
+    (:type "function" :supports ("ag" "grep" "rg" "git-grep") :language "powershell"
+           :regex "\\s+function\\s+[a-zA-Z_][a-zA-Z0-9\\-]+"
+           :tests ("function Function-Name {" "function MyFunction12")
+           :not ("function My-Function!" "function 123Function"))
+
+    (:type "variable" :supports ("ag" "grep" "rg" "git-grep") :language "powershell"
+           :regex "^\\s*(\\[[a-zA-Z_\\-\\._]+\\])?\\s*(\\$[a-zA-Z_][a-zA-Z1-9\\-_]*\\s*=)"
+           :tests ("$var=" "$Var=" "$var123=" "$v=" "   $var="
+                   "  $var" "[System.String]$s-" "[string] $s2 =")
+           :not ("$123variable" "$my-variable!" "$my variable"
+                 "$my,variable" "$my.variable" "$variable#name"
+                 "foreach ($i in $items"))
+
+    )
 
 
   "List of regex patttern templates organized by language and type to use for generating the grep command."
@@ -1682,7 +1697,11 @@ or most optimal searcher."
     (:language "hcl" :ext "tf" :agtype "terraform" :rgtype "tf")
     (:language "hcl" :ext "tfvars" :agtype "terraform" :rgtype nil)
     (:language "apex" :ext "cls" :agtype nil :rgtype nil)
-    (:language "apex" :ext "trigger" :agtype nil :rgtype nil))
+    (:language "apex" :ext "trigger" :agtype nil :rgtype nil)
+    (:language "powershell" :ext "ps1" :agtype nil :rgtype "ps")
+    (:language "powershell" :ext "psd1" :agtype nil :rgtype "ps")
+    (:language "powershell" :ext "psm1" :agtype nil :rgtype "ps")
+    )
 
   "Mapping of programming language(s) to file extensions."
   :group 'dumb-jump
